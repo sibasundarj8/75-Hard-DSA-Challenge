@@ -20,6 +20,7 @@ import java.util.Scanner;/*
  *          1 <= heights.length <= 10⁵
  *          0 <= heights[i] <= 10⁴
  */
+
 import java.util.Stack;
 
 public class Day_03_LC_84 {
@@ -29,7 +30,7 @@ public class Day_03_LC_84 {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Enter bar heights: ");
-        String[] s =  sc.nextLine().split(" ");
+        String[] s = sc.nextLine().split(" ");
 
         int n = s.length;
         int[] heights = new int[n];
