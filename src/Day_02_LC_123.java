@@ -1,4 +1,4 @@
-import java.util.Scanner;/*
+/*
  *
  * https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
  *
@@ -19,6 +19,8 @@ import java.util.Scanner;/*
  *          1 <= prices.length <= 10⁵
  *          0 <= prices[i] <= 10⁵
  */
+
+import java.util.Scanner;
 
 public class Day_02_LC_123 {
 
