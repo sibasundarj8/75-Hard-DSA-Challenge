@@ -51,8 +51,9 @@ public class Day_14_LC_407 {
 
     /// Solution
 /*
-✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘-Brute-Force-✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘
-
+✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘-Path-Compression-✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘
+TC : O((n*m) * (n*m log(n*m)))
+SC : O(n * m)
 */
     static int bruteforce(int[][] heightMap) {
         int n = heightMap.length;
@@ -74,7 +75,7 @@ public class Day_14_LC_407 {
         for (int i = 1; i < n - 1; i++) {
             for (int j = 1; j < m - 1; j++) {
                 if (visitedMap[i][j] == -1) dijkstra(i, j, n, m, heightMap, visitedMap);
-                total +=  (visitedMap[i][j] -  heightMap[i][j]);
+                total += (visitedMap[i][j] - heightMap[i][j]);
             }
         }
 
@@ -82,13 +83,13 @@ public class Day_14_LC_407 {
     }
 
     // checking the nearest point by which water can flow outside.
-    private  static void dijkstra(int i, int j, int r, int c, int[][] heightMap, int[][] visitedMap) {
+    private static void dijkstra(int i, int j, int r, int c, int[][] heightMap, int[][] visitedMap) {
         int x = i;
         int y = j;
         int[][] parentRow = new int[r][c];
         int[][] parentCol = new int[r][c];
         boolean[][] visited = new boolean[r][c];
-        Queue <int[]> pq = new PriorityQueue<>(Comparator.comparingInt(h -> Math.max(heightMap[h[0]][h[1]], visitedMap[h[0]][h[1]])));
+        Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(h -> Math.max(heightMap[h[0]][h[1]], visitedMap[h[0]][h[1]])));
         int[] dRow = {-1, 0, 1, 0};
         int[] dCol = {0, 1, 0, -1};
 
@@ -122,11 +123,6 @@ public class Day_14_LC_407 {
             }
         }
 
-        while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
-            visitedMap[cur[0]][cur[1]] = Math.max(heightMap[cur[0]][cur[1]], visitedMap[x][y]);
-        }
-
         // update the whole path.
         while (x != i || y != j) {
             int val = visitedMap[x][y];
@@ -138,8 +134,9 @@ public class Day_14_LC_407 {
     }
 
 /*
-✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔-Optimal-✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
-
+✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔-Multi-Source-Dijkstra-✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+TC : O((R*C) log (R*C))
+SC : O(R * C)
 */
     static int trapRainWater(int[][] heightMap) {
         int n = heightMap.length;
@@ -157,7 +154,7 @@ public class Day_14_LC_407 {
                 if (i == 0 || j == 0 || i == n - 1 || j == m - 1) {
                     visitedMap[i][j] = heightMap[i][j];
                     pq.offer(new int[]{i, j});
-                } else  {
+                } else {
                     visitedMap[i][j] = -1;
                 }
             }
@@ -174,8 +171,8 @@ public class Day_14_LC_407 {
                 int newI = cur[0] + dRow[d];
                 int newJ = cur[1] + dCol[d];
 
-                if (0 < newI && newI < n - 1 && 0  < newJ && newJ < m - 1 && visitedMap[newI][newJ] == -1) {
-                    visitedMap[newI][newJ] = Math.max(visitedMap[cur[0]][cur[1]],  heightMap[newI][newJ]);
+                if (newI >= 0 && newI < n && newJ >= 0 && newJ < m && visitedMap[newI][newJ] == -1) {
+                    visitedMap[newI][newJ] = Math.max(visitedMap[cur[0]][cur[1]], heightMap[newI][newJ]);
                     pq.offer(new int[]{newI, newJ});
                 }
             }
