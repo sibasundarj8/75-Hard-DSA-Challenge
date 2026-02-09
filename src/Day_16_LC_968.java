@@ -59,22 +59,29 @@ public class Day_16_LC_968 {
 
     /// Solution
     static int minCameraCover(TreeNode root) {
-        int put = countCamera(root, 1);
-        int notPut = countCamera(root, 2);
+        int[] count = {0};
+        if (countCamera(root, count) == 0) count[0]++;
 
-        System.out.println(put + " " +  notPut);
-
-        return Math.min(put, notPut);
+        return count[0];
     }
 
-    private static int countCamera(TreeNode root, int requirement) {
+    private static int countCamera(TreeNode root, int[] count) {
         // base case
-        if (root == null) return 0;
+        if (root == null) return 1;
 
-        //recursive case
-
+        // recursive work
+        int leftResponse = countCamera(root.left, count);
+        int rightResponse = countCamera(root.right, count);
 
         // self work
+        if (leftResponse == 0 || rightResponse == 0) {
+            count[0]++;
+            return 2;
+        }
+
+        if (leftResponse == 2 || rightResponse == 2) {
+            return 1;
+        }
 
         return 0;
     }

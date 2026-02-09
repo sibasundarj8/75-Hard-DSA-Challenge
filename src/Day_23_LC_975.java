@@ -64,7 +64,12 @@ public class Day_23_LC_975 {
     }
 
     /// Solution
-    static int oddEvenJumps(int[] arr) {
+/*
+✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘-brute-force-✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘✘
+TC : O(N²)
+SC : O(N) + recursive depth
+*/
+    static int bruteForce(int[] arr) {
         int n = arr.length;
         int count = 0;
 
@@ -97,7 +102,7 @@ public class Day_23_LC_975 {
         }
 
         for (int i = 0; i < n; i++) {
-            if (rec(i, 0, n, gs, sl)) {
+            if (rec2(i, 0, n, gs, sl)) {
                 count++;
             }
         }
@@ -105,13 +110,74 @@ public class Day_23_LC_975 {
         return count;
     }
 
-    private static boolean rec(int idx, int turn, int n, int[] gs, int[] sl) {
+    private static boolean rec2(int idx, int turn, int n, int[] gs, int[] sl) {
         // base case
         if (idx == n - 1) return true;
         if (idx == -1) return false;
 
         // recursive work
-        if (turn == 0) return rec(gs[idx], 1, n, gs, sl);
-        else return rec(sl[idx], 0, n, gs, sl);
+        if (turn == 0) return rec2(gs[idx], 1, n, gs, sl);
+        else return rec2(sl[idx], 0, n, gs, sl);
+    }
+
+/*
+✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔-Memoization-✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+TC : O(N)
+SC : O(N) + recursive depth
+*/
+    static int oddEvenJumps(int[] arr) {
+        int n = arr.length;
+        int count = 0;
+
+        int[] gs = new int[n];
+        int[] sl = new int[n];
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        Boolean[][] dp = new Boolean[n][2];
+
+        gs[n - 1] = n - 1;
+        sl[n - 1] = n - 1;
+        map.put(arr[n - 1], n - 1);
+
+        for (int i = n - 2; i >= 0; i--) {
+            if (map.containsKey(arr[i])) {
+                sl[i] = map.get(arr[i]);
+                gs[i] = map.get(arr[i]);
+            } else {
+                Integer nextGreaterSmallest = map.higherKey(arr[i]);
+                Integer nextSmallerLargest = map.lowerKey(arr[i]);
+
+                // next Greater Smallest index of current element
+                if (nextGreaterSmallest == null) gs[i] = -1;
+                else gs[i] = map.get(nextGreaterSmallest);
+
+                // next Smaller Largest index of current element
+                if (nextSmallerLargest == null) sl[i] = -1;
+                else sl[i] = map.get(nextSmallerLargest);
+            }
+
+            map.put(arr[i], i);
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (rec(i, 0, n, gs, sl, dp)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private static boolean rec(int idx, int turn, int n, int[] gs, int[] sl, Boolean[][] dp) {
+        // base case
+        if (idx == n - 1) return true;
+        if (idx == -1) return false;
+        if (dp[idx][turn] != null) return dp[idx][turn];
+
+        // recursive work
+        boolean flag;
+        if (turn == 0) flag = rec(gs[idx], 1, n, gs, sl, dp);
+        else flag = rec(sl[idx], 0, n, gs, sl, dp);
+
+        return dp[idx][turn] = flag;
     }
 }
