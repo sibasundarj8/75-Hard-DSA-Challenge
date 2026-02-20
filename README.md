@@ -1,9 +1,9 @@
 # 🚀 75 Hard DSA Challenge — HARD Problems Only
 
-![Language](https://img.shields.io/badge/Language-Java-red)
+![Language](https://img.shields.io/badge/Language-Java-yellow)
 ![Focus](https://img.shields.io/badge/Focus-Advanced%20DSA-black)
 ![Problems](https://img.shields.io/badge/Problems-HARD%20Only-critical)
-![Progress](https://img.shields.io/badge/Progress-Day%2018%20%2F%2075-orange)
+![Progress](https://img.shields.io/badge/Progress-Day%2019%20%2F%2075-black)
 
 > Solving and explaining **one HARD DSA problem every day for 75 days** — without skipping — to build elite-level problem-solving depth and discipline.
 
